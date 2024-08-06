@@ -40,7 +40,8 @@ Finally,
 9. If you get this message:
 sqlexpress does not exist
 SQL Server does not exist or access denied.
-SQLState 08001 and Error 17. In order to resolve this, you need to enable named pipes and TCP in the SQL Server Configuration Manager that was installed by default on your system.
+SQLState 08001 and Error 17.
+In order to resolve this, you need to enable named pipes and TCP in the SQL Server Configuration Manager that was installed by default on your system.
 strangeways\sqlexpress   
 ---------------------------------
 20240806
