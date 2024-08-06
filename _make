@@ -1,0 +1,130 @@
+@echo off
+:: _make.bat pgmnamewithoutextension (driveletternocolon - not used anymore)
+:: ex:  _make something H
+::  cd C:\GEOS\EOS\Devel\source   <- because I'm too lazy to type this!
+:: ---------------------------------------
+ECHO SETUP APPLICATION ENVIRONMENT
+::----------------------------------------
+SET drv=C:
+SET apphome=%drv%\GEOS\EOS\Devel\source
+cd %apphome%  
+:: ---------------------------------------
+:: ---------------------------------------
+:: --- GET TODAY'S DATE in yyyymmdd, Name the log file
+:: ----------------------------------------
+SET fdt=%date:~10,4%%date:~4,2%%date:~7,2%
+SET LOG=%apphome%\sourcelog\%1_%fdt%.LOG
+ECHO ----------------------------------   >%LOG% 2>&1
+ECHO --START _make.BAT  %fdt%-%Time%  -- >>%LOG% 2>&1
+ECHO ----------------------------------  >>%LOG% 2>&1
+ECHO ----------------------------------  >>%LOG% 2>&1
+ECHO SETUP COMPILE ENVIRONMENT           >>%LOG% 2>&1
+ECHO ----------------------------------  >>%LOG% 2>&1
+SET OC_RUNTIME=c:\GEOS\GNUCobol\bin
+ECHO ------Update PATH One Time Only!-----                                                              >>%LOG% 2>&1
+if "%PATHUPDATED%"=="" set PATH=%OC_RUNTIME%;C:\GEOS\GNUCobol\lib;%PATH%
+SET PATHUPDATED=1
+SET "esqlOC_RUNTIME=c:\GEOS\GNUCobol\esqlOC\x64\release"
+SET "COB_CFLAGS=-I c:\GEOS\GNUCobol"
+SET "COB_LIBRARY_PATH=C:\GEOS\GNUCobol\esqlOC\x64\release\ocsql.lib;C:\GEOS\GNUCobol\lib\libcob.dll.a"
+SET "COB_CONFIG_DIR=c:\GEOS\GNUCobol\config"
+ECHO LD_LIBRARY_PATH    is ONLY used at RunTime!!!!    Linker uses LIBRARY_PATH at compile Time
+SET "LIBRARY_PATH=C:\GEOS\GNUCobol\lib\libcob.dll.a;C:\GEOS\GNUCobol\esqlOC\x64\release\ocsql.lib"
+::--------------------------------------------------------------------------
+:: ---------------------------------------------------------------
+:: ---------------------------------------------------------------
+goto %1
+:: ---------------------------------------------------------------
+:: At one time I would do backups first here
+:: ---------------------------------------------------------------
+ECHO ----------------------------------    >>%LOG% 2>&1
+ECHO - BACKUP CURRENT DLL ONE TIME A DAY!  >>%LOG% 2>&1
+ECHO ----------------------------------    >>%LOG% 2>&1
+::  Tried this, better to do it manually!!
+ECHO ----------------------------------    >>%LOG% 2>&1
+ECHO IF NOT EXIST IN ARCHIVE CREATE A COPY >>%LOG% 2>&1
+ECHO ----------------------------------    >>%LOG% 2>&1
+::IF NOT EXIST %drv%\%PGMLIB%\dllarchive\%1_%fdt%.DLL copy %drv%\%PGMLIB%\%1.DLL  %drv%\%PGMLIB%\dllarchive\%1_%fdt%.DLL /y  >>%LOG% 2>&1
+:: ---------------------------------------------------------------
+:: ---------------------------------------------------------------
+::             ---  CREATE EXE FILES   ---
+:: ---------------------------------------------------------------
+:: ---------------------------------------------------------------
+:BLOCK1
+:BLOCK2
+:CHKALL
+:esqlOCStart
+:fixquantity
+:UPDPROD
+::--------------------------------------------
+ECHO ---------------------------------- >>%LOG% 2>&1
+ECHO - CREATE A '*.exe' FILE!           >>%LOG% 2>&1
+ECHO ---------------------------------- >>%LOG% 2>&1:
+ECHO -----SQL precompile  Input *.cbl  Outputs *.cob-----             >>%LOG% 2>&1
+esqlOC %1.cbl                                                         >>%LOG% 2>&1
+
+ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.exe-----     >>%LOG% 2>&1
+cobc -fixed -v -x -static -LC:\GEOS\GNUCobol\lib -o c:\GEOS\EOS\pgmexe\%1.exe %apphome%\%1.cob   >>%LOG% 2>&1
+goto resume
+ECHO --------------------------------- >>%LOG% 2>&1
+ECHO ---  CREATE BASIC DLL FILES  ---- >>%LOG% 2>&1
+ECHO --------------------------------- >>%LOG% 2>&1
+:APINV
+:APY010
+:APY030
+:APY035
+:APY045
+:APY046
+:APY051
+:APY060
+:APY070
+:APY100
+:APY102
+:APY105
+:ARBAL
+ECHO ---------------------------------- >>%LOG% 2>&1
+ECHO - CREATE A DLL FILE!               >>%LOG% 2>&1
+ECHO - With NO ADIS Support!!           >>%LOG% 2>&1
+ECHO ---------------------------------- >>%LOG% 2>&1
+ECHO -----SQL precompile  Input *.cbl  Outputs *.cob-----             >>%LOG% 2>&1
+esqlOC %1.cbl                                                         >>%LOG% 2>&1
+
+ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.exe-----     >>%LOG% 2>&1
+cobc -fixed -v -Wall -static -LC:\GEOS\GNUCobol\lib -o c:\GEOS\EOS\pgmexe\%1.dll %apphome%\%1.cob   >>%LOG% 2>&1
+goto resume
+::
+ECHO ------------------------------------ >>%LOG% 2>&1
+ECHO -  ---  CLEANUP  ---                 >>%LOG% 2>&1
+ECHO ------------------------------------ >>%LOG% 2>&1
+::
+:dllresume
+::  Tried this, better to do it manually!!
+ECHO ----------------------------------    >>%LOG% 2>&1
+ECHO IF NOT EXIST IN ARCHIVE CREATE A COPY >>%LOG% 2>&1
+ECHO ----------------------------------    >>%LOG% 2>&1
+::IF NOT EXIST %drv%\%PGMLIB%\dllarchive\%1_%fdt%.DLL copy %drv%\%PGMLIB%\%1.DLL  %drv%\%PGMLIB%\dllarchive\%1_%fdt%.DLL /y  >>%LOG% 2>&1
+::
+:resume
+::  ARCHIVE SOURCE DAILY
+ECHO ----------------------------------    >>%LOG% 2>&1
+ECHO IF NOT EXIST IN ARCHIVE CREATE A COPY >>%LOG% 2>&1
+ECHO ----------------------------------    >>%LOG% 2>&1
+::IF NOT EXIST Z:\ACSDCS2\me\archive%1_%fdt%.CBL 
+::copy H:\somedir\source\%1.cbl  z:\somedir\men\source\%1_%fdt%.cbl /y  >>%LOG% 2>&1
+::
+
+ECHO ---------------------------------- >>%LOG% 2>&1
+ECHO - Delete unnecessary files         >>%LOG% 2>&1
+ECHO ---------------------------------- >>%LOG% 2>&1
+ECHO "del /F /Q %appname%\source\%1.cob >>%LOG% 2>&1"
+::---Will NOT find these-------------------
+::del /F /Q %apphome%\%1.cob  >>%LOG% 2>&1
+::
+ECHO ---------------------------------- >>%LOG% 2>&1
+ECHO - MOVE to sourcearchive            >>%LOG% 2>&1
+ECHO ---------------------------------- >>%LOG% 2>&1
+:: copy %APPLIB%\%SRCLIB%\%1.CBL %ARCLIB%\%SRCLIB%\%1_%fdt%.CBL /y >>%LOG% 2>&1
+:finish
+ECHO FINISHED!
+
+
