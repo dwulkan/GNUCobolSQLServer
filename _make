@@ -86,10 +86,11 @@ ECHO ---------------------------------- >>%LOG% 2>&1
 ECHO - CREATE A DLL FILE!               >>%LOG% 2>&1
 ECHO - With NO ADIS Support!!           >>%LOG% 2>&1
 ECHO ---------------------------------- >>%LOG% 2>&1
+:: NOTE: THIS HAS NOT BEEN TESTED YET!!!
 ECHO -----SQL precompile  Input *.cbl  Outputs *.cob-----             >>%LOG% 2>&1
 esqlOC %1.cbl                                                         >>%LOG% 2>&1
 
-ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.exe-----     >>%LOG% 2>&1
+ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.dll-----     >>%LOG% 2>&1
 cobc -fixed -v -Wall -static -LC:\GEOS\GNUCobol\lib -o c:\GEOS\EOS\pgmexe\%1.dll %apphome%\%1.cob   >>%LOG% 2>&1
 goto resume
 ::
