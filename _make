@@ -111,7 +111,7 @@ ECHO ----------------------------------    >>%LOG% 2>&1
 ECHO IF NOT EXIST IN ARCHIVE CREATE A COPY >>%LOG% 2>&1
 ECHO ----------------------------------    >>%LOG% 2>&1
 ::IF NOT EXIST Z:\ACSDCS2\me\archive%1_%fdt%.CBL 
-::copy H:\somedir\source\%1.cbl  z:\somedir\men\source\%1_%fdt%.cbl /y  >>%LOG% 2>&1
+::copy H:\somedir\source\%1.cbl  z:\somedir\me\source\%1_%fdt%.cbl /y  >>%LOG% 2>&1
 ::
 
 ECHO ---------------------------------- >>%LOG% 2>&1
