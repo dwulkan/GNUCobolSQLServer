@@ -11,7 +11,7 @@ Some things you will need to do (or know)
 6.  cobc.exe expects pgm.cob  So, if not using SQL your source pgm will have a .cob extension, esqlOC.exe inputs pgm.cbl and outputs pgm.cob which then goes into cobc.exe
 7.  20240807 I am investigating pdcurses for mouse control.  It's in the GNUCobol\bin directory.  It looks to be almost (yeah right) a direct replacement of the ADIS mouse control?  cobc -fixed -x -v -static -lpdcurses -o esqlOCGetStart1.exe  I will make another post when I get this working!
 
-8.  
+ 
 GNUCobol with SQL Server on Windows
 Lessons Learned
 1. Thank you Sergey for the GitHub "Getting Started: esqlOC by Sergey" - I could not have done this without it!
@@ -34,7 +34,7 @@ When you are compiling your code, you told it to search for a shared library usi
 
 The way to solve this problem is to add -L to the compiling line with the folder of your library, but this usually means you will need to change your Makefile and it's not the best practice I think.
 
-Another way is to put your library folder(s) to LIBRARY_PATH, because gcc and most compilers will automatically add -L flags to those folders before passing to the linker, and no matter whether you are compiling with static or dynamic libraries, the compiler will only check LIBRARY_PATH. So LD_LIBRARY_PATH is useless during compiling.
+Another way is to put your library folder(s) to LIBRARY_PATH, because gcc and most compilers will automatically add -L flags to those folders before passing to the linker, and no matter whether you are compiling with static or dynamic libraries, the compiler will only check LIBRARY_PATH. So LD_LIBRARY_PATH is useless during compiling.  <--Wish I could highlite this in yellow
 
 LD_LIBRARY_PATH will be check by the system when you actually run your program. This is a good way to allow multiple versions of the same library existing on your system. For example, some old code may need CUDA 9, and some new code might need CUDA 11, and LD_LIBRARY_PATH is useful in such cases.
 
