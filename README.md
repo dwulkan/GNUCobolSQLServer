@@ -1,5 +1,18 @@
 # GNUCobolSQLServer
-GNUCobol with SQL Server
+
+This project is about compiling the GNUCobol program esqlOCGetStart1.cbl in my Windows 11 environment with a successful connection to my SQL Server database and successfully runing the SQL statements in the program.
+
+Some things you will need to do (or know)
+1.  have a database user defined in Windows and the database (instance definition not necessary but the database named test will need this)
+2.  esqlOCGetStart.cbl does not create the database named test.  You can use SSMS to create it and define a user in test database!
+3.  I can run and compile without being administrator
+4.  I had to add two inbound rules in the Windows Defender firewall to allow TCP and UDP to get to the SQl Server, see below how to do this
+5.  I had to learn how to run ODBC to Start Trace / Stop Trace to debug connection issues -  become familiar with this!
+6.  cobc.exe expects pgm.cob  So, if not using SQL your source pgm will have a .cob extension, esqlOC.exe inputs pgm.cbl and outputs pgm.cob which then goes into cobc.exe
+7.  20240807 I am investigating pdcurses for mouse control.  It's in the GNUCobol\bin directory.  It looks to be almost (yeah right) a direct replacement of the ADIS mouse control?  cobc -fixed -x -v -static -lpdcurses -o esqlOCGetStart1.exe  I will make another post when I get this working!
+
+8.  
+GNUCobol with SQL Server on Windows
 Lessons Learned
 1. Thank you Sergey for the GitHub "Getting Started: esqlOC by Sergey" - I could not have done this without it!
 
