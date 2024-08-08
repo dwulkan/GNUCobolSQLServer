@@ -66,7 +66,9 @@ https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configur
     in C:\EOS\source\sourcelog will be esqlOCStart_YYYYMMDD.LOG
 
 18. To run:  esqlOCStart.bat
+
     You should have created three tables, populated them and output (in cmd window) a report
+
     This is where you can use ODBC Tracing tab to start a trace before you run esqlOCStart.bat and stop the trace to review the ODBC dialog for problems
 
     
