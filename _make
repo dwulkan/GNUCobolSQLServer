@@ -1,41 +1,45 @@
-@echo off
-:: _make.bat pgmnamewithoutextension (driveletternocolon - not used anymore)
-:: ex:  _make something H
-::  cd C:\GEOS\EOS\Devel\source   <- because I'm too lazy to type this!
+@echo on
+:: _make.bat pgmnamewithoutextension driveletternocolon
+:: ex:  _make arp050 H
+::  cd C:\EOS\source  <- because I'm too lazy to type this!
 :: ---------------------------------------
 ECHO SETUP APPLICATION ENVIRONMENT
 ::----------------------------------------
 SET drv=C:
-SET apphome=%drv%\GEOS\EOS\Devel\source
-cd %apphome%  
+SET apphome=%drv%\EOS
+cd %apphome%\source  
 :: ---------------------------------------
 :: ---------------------------------------
 :: --- GET TODAY'S DATE in yyyymmdd, Name the log file
 :: ----------------------------------------
 SET fdt=%date:~10,4%%date:~4,2%%date:~7,2%
-SET LOG=%apphome%\sourcelog\%1_%fdt%.LOG
+SET LOG=%apphome%\source\sourcelog\%1_%fdt%.LOG
 ECHO ----------------------------------   >%LOG% 2>&1
 ECHO --START _make.BAT  %fdt%-%Time%  -- >>%LOG% 2>&1
 ECHO ----------------------------------  >>%LOG% 2>&1
 ECHO ----------------------------------  >>%LOG% 2>&1
 ECHO SETUP COMPILE ENVIRONMENT           >>%LOG% 2>&1
 ECHO ----------------------------------  >>%LOG% 2>&1
-SET OC_RUNTIME=c:\GEOS\GNUCobol\bin
+SET OC_RUNTIME=%apphome%\GNUCobol\bin
 ECHO ------Update PATH One Time Only!-----                                                              >>%LOG% 2>&1
-if "%PATHUPDATED%"=="" set PATH=%OC_RUNTIME%;C:\GEOS\GNUCobol\lib;%PATH%
+if "%PATHUPDATED%"=="" set PATH=%OC_RUNTIME%;%apphome%\GNUCobol\lib;%PATH%
 SET PATHUPDATED=1
-SET "esqlOC_RUNTIME=c:\GEOS\GNUCobol\esqlOC\x64\release"
-SET "COB_CFLAGS=-I c:\GEOS\GNUCobol"
-SET "COB_LIBRARY_PATH=C:\GEOS\GNUCobol\esqlOC\x64\release\ocsql.lib;C:\GEOS\GNUCobol\lib\libcob.dll.a"
-SET "COB_CONFIG_DIR=c:\GEOS\GNUCobol\config"
-ECHO LD_LIBRARY_PATH    is ONLY used at RunTime!!!!    Linker uses LIBRARY_PATH at compile Time
-SET "LIBRARY_PATH=C:\GEOS\GNUCobol\lib\libcob.dll.a;C:\GEOS\GNUCobol\esqlOC\x64\release\ocsql.lib"
+ECHO PATH UPDATED
+SET "esqlOC_RUNTIME=%apphome%\GNUCobol\esqlOC\x64\release"
+SET "COB_CFLAGS=-I %apphome%\GNUCobol"
+SET "COB_LIBRARY_PATH=%apphome%\GNUCobol\esqlOC\x64\release\ocsql.lib;%apphome%\GNUCobol\lib\libcob.dll.a"
+SET "COB_CONFIG_DIR=%apphome%\GNUCobol\config"
+SET "COB_COPY_DIR=%apphome%\cobcpy"
+SET "COBCPY_DIR=%apphome%\cobcpy"
+SET "COB_PRELOAD=ocsql.lib"
+ECHO LD_LIBRARY_PATH is ONLY used at RunTime!!!! Linker uses LIBRARY_PATH at compile Time
+SET "LIBRARY_PATH=%apphome%\GNUCobol\lib\libcob.dll.a;%apphome%\GNUCobol\esqlOC\x64\release\ocsql.lib"
 ::--------------------------------------------------------------------------
 :: ---------------------------------------------------------------
 :: ---------------------------------------------------------------
+ECHO GOTO %1
 goto %1
 :: ---------------------------------------------------------------
-:: At one time I would do backups first here
 :: ---------------------------------------------------------------
 ECHO ----------------------------------    >>%LOG% 2>&1
 ECHO - BACKUP CURRENT DLL ONE TIME A DAY!  >>%LOG% 2>&1
@@ -50,49 +54,98 @@ ECHO ----------------------------------    >>%LOG% 2>&1
 ::             ---  CREATE EXE FILES   ---
 :: ---------------------------------------------------------------
 :: ---------------------------------------------------------------
+:O846A
+:AMPCHG                # 20141224 dw Report AMP Pricing Differences
+:AMPCHGQ               # 20141224 dw Report AMP Pricing Differences
+:AMPCHGP               # 20141224 dw Report AMP Pricing Differences
+:AMPLOAD
+:app000
+:app003
+:app003D
+:BLDAMP                # TYCO Pricing 4 creates a file of amp only parts in stock
+:BLDAMPDB              # TYCO create MF file for tycofile  (MDF?)
 :BLOCK1
 :BLOCK2
 :CHKALL
 :esqlOCStart
 :fixquantity
-:UPDPROD
+:IMPAMP03B             # TYCO Pricing 3 creates non-stk file
+:IMPAMP03E             # TYCO Pricing 5 deletes pricing for items in the item master not in the pricing master
+:IMPAMP03F             # TYCO Pricing 6 changes moq
+:IMPAMP03OU            # TYCO Pricing 7 changes o parts only.  looks in the oldalias for o part or uses description
+:IMPAMP03Y             # TYCO Pricing 1 set new prices
+:IMPAMP03Z             # TYCO Pricing 2 set new prices for items with "o" part numbers in the description
+:IMPAMP03O             # TYCO Pricing   Deletes "O" pricing for parts not an AMP data base or which no pricing (needs testing)
+:IMPAMP05              # TYCO Pricing   ???
+:MCIQU1
+:MCIQU2
+:MCIQU3
+:MCIQU9                # 20141201 dw This has double QPR END-PRINT
+:MCIQUO
+:MCIQUA
+:MCIQUB
+:ORDAC                 # 20180430 dw ORDACK with hard coded OID! ORDAC.EXE
+:PRCAPI
+:PRCCHG
+:PRCJM1
+:PRCUAP
+:PRCUJ1
+:PRCUJM
+:PRL000
+::READD   .exe not dll !
+:READDIR
+:RBLDUPS
+:RCDTYCO
+::SHP2LU
+:SIMPLE_TEST
+::TRKLU
+:TYCOREC
+:updateproducts
+:UPDATEPRODUCTS7
 ::--------------------------------------------
 ECHO ---------------------------------- >>%LOG% 2>&1
-ECHO - CREATE A '*.exe' FILE!           >>%LOG% 2>&1
+ECHO - CREATE A SQL '*.exe' FILE!       >>%LOG% 2>&1
 ECHO ---------------------------------- >>%LOG% 2>&1:
 ECHO -----SQL precompile  Input *.cbl  Outputs *.cob-----             >>%LOG% 2>&1
-esqlOC %1.cbl                                                         >>%LOG% 2>&1
+esqlOC %apphome%\source\%1.cbl                                        >>%LOG% 2>&1
 
+ECHO .
 ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.exe-----     >>%LOG% 2>&1
-cobc -fixed -v -x -static -LC:\GEOS\GNUCobol\lib -o c:\GEOS\EOS\pgmexe\%1.exe %apphome%\%1.cob   >>%LOG% 2>&1
+cobc -fixed -v -x -static -L%apphome%\GNUCobol\lib -o %apphome%\pgmexe\%1.exe %apphome%\source\%1.cob   >>%LOG% 2>&1
 goto resume
-ECHO --------------------------------- >>%LOG% 2>&1
-ECHO ---  CREATE BASIC DLL FILES  ---- >>%LOG% 2>&1
-ECHO --------------------------------- >>%LOG% 2>&1
-:APINV
-:APY010
-:APY030
-:APY035
-:APY045
-:APY046
-:APY051
-:APY060
-:APY070
-:APY100
-:APY102
-:APY105
-:ARBAL
-ECHO ---------------------------------- >>%LOG% 2>&1
-ECHO - CREATE A DLL FILE!               >>%LOG% 2>&1
-ECHO - With NO ADIS Support!!           >>%LOG% 2>&1
-ECHO ---------------------------------- >>%LOG% 2>&1
-:: NOTE: THIS HAS NOT BEEN TESTED YET!!!
-ECHO -----SQL precompile  Input *.cbl  Outputs *.cob-----             >>%LOG% 2>&1
-esqlOC %1.cbl                                                         >>%LOG% 2>&1
 
-ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.dll-----     >>%LOG% 2>&1
-cobc -fixed -v -Wall -static -LC:\GEOS\GNUCobol\lib -o c:\GEOS\EOS\pgmexe\%1.dll %apphome%\%1.cob   >>%LOG% 2>&1
+:pgmxxx
+:getdat
+::--------------------------------------------
+ECHO ---------------------------------- >>%LOG% 2>&1
+ECHO - CREATE A SQL '*.dll' FILE!   >>%LOG% 2>&1
+ECHO ---------------------------------- >>%LOG% 2>&1:
+ECHO -----SQL precompile  Input *.cbl  Outputs *.cob-----             >>%LOG% 2>&1
+esqlOC %apphome%\source\%1.cbl                                        >>%LOG% 2>&1
+
+ECHO .
+ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.exe-----     >>%LOG% 2>&1
+cobc -fixed -v -Wall -static -L%apphome%\GNUCobol\lib -o %apphome%\pgmexe\%1.dll %apphome%\source\%1.cob   >>%LOG% 2>&1
 goto resume
+
+
+:mousetest
+:screengen
+:screenmak
+ECHO ---------------------------------- >>%LOG% 2>&1
+ECHO - CREATE A NON-SQL '*.exe' FILE!   >>%LOG% 2>&1
+ECHO ---------------------------------- >>%LOG% 2>&1:
+ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.exe-----     >>%LOG% 2>&1
+cobc -fixed -v -x -static -L%apphome%\GNUCobol\lib -o %apphome%\pgmexe\%1.exe %apphome%\source\%1.cob   >>%LOG% 2>&1
+goto resume
+
+ECHO --------------------------------- >>%LOG% 2>&1
+ECHO --  CREATE NON-SQL DLL FILES  --- >>%LOG% 2>&1
+ECHO --------------------------------- >>%LOG% 2>&1
+ECHO -----COBOL COMPILE and LINK  Input *.cob  Outputs *.exe-----     >>%LOG% 2>&1
+cobc -fixed -v -Wall -static -L%apphome%\GNUCobol\lib -o %apphome%\pgmexe\%1.dll %apphome%\source\%1.cob   >>%LOG% 2>&1
+goto resume
+
 ::
 ECHO ------------------------------------ >>%LOG% 2>&1
 ECHO -  ---  CLEANUP  ---                 >>%LOG% 2>&1
@@ -110,8 +163,8 @@ ECHO ----------------------------------    >>%LOG% 2>&1
 ECHO ----------------------------------    >>%LOG% 2>&1
 ECHO IF NOT EXIST IN ARCHIVE CREATE A COPY >>%LOG% 2>&1
 ECHO ----------------------------------    >>%LOG% 2>&1
-::IF NOT EXIST Z:\ACSDCS2\me\archive%1_%fdt%.CBL 
-::copy H:\somedir\source\%1.cbl  z:\somedir\me\source\%1_%fdt%.cbl /y  >>%LOG% 2>&1
+::IF NOT EXIST Z:\ACSDCS2\dwulkan\archive%1_%fdt%.CBL 
+::copy H:\acsdcs2\source\%1.cbl  z:\acsdcs2\dwulkan\source\%1_%fdt%.cbl /y  >>%LOG% 2>&1
 ::
 
 ECHO ---------------------------------- >>%LOG% 2>&1
