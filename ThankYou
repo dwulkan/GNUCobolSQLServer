@@ -34,7 +34,9 @@ When you are compiling your code, you told it to search for a shared library usi
 
 The way to solve this problem is to add -L to the compiling line with the folder of your library, but this usually means you will need to change your Makefile and it's not the best practice I think.
 
-Another way is to put your library folder(s) to LIBRARY_PATH, because gcc and most compilers will automatically add -L flags to those folders before passing to the linker, and [no matter whether you are compiling with static or dynamic libraries, the compiler will only check LIBRARY_PATH. So LD_LIBRARY_PATH is useless during compiling.]      <--Wish I could highlite this in yellow
+Another way is to put your library folder(s) to LIBRARY_PATH, because gcc and most compilers will automatically add -L flags to those folders before passing to the linker, and 
+
+[no matter whether you are compiling with static or dynamic libraries, the compiler will only check LIBRARY_PATH. So LD_LIBRARY_PATH is useless during compiling.]          <--Wish I could highlite this in yellow
 
 LD_LIBRARY_PATH will be check by the system when you actually run your program. This is a good way to allow multiple versions of the same library existing on your system. For example, some old code may need CUDA 9, and some new code might need CUDA 11, and LD_LIBRARY_PATH is useful in such cases.
 
