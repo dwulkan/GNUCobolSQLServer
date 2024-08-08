@@ -30,7 +30,9 @@ This project is about compiling the GNUCobol program esqlOCGetStart1.cbl in my W
                 +--\sourcelog
 
 2.a  Copy C:\EOS\GNUCobol\esqlOC\x64\release\esqlOC.exe ->C:\EOS\GNUCobol\bin
+
 2.b  Copy C:\EOS\GNUCobol\esqlOC\x64\release\ocsql.dll  ->C:\EOS\GNUCobol\bin
+
 2.c  Copy C:\EOS\GNUCobol\esqlOC\x64\release\ocsql.lib  ->C:\EOS\GNUCobol\bin
 
 3.  adduser to windows (to keep your username private)
