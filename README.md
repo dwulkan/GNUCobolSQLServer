@@ -1,6 +1,6 @@
 # GNUCobolSQLServer
 
-This project is about compiling the GNUCobol program esqlOCGetStart1.cbl in my Windows 11 environment with a successful connection to my SQL Server database and successfully runing the SQL statements in the program.
+This project is about compiling the GNUCobol program esqlOCGetStart1.cbl in my Windows 11 environment with a successful connection to my SQL Server database and successfully running the SQL statements in the program.
 
 Some things you will need to do (or know)
 1.  have a database user defined in Windows and the database (instance definition not necessary but the database named test will need this)
