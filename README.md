@@ -45,11 +45,11 @@ This project is about compiling the GNUCobol program esqlOCGetStart1.cbl in my W
 
 You will have to edit the contents of these files for your environment setup
 
-9.  copy _make.bat       in C:\EOS\source
+9.  copy _make.bat       into C:\EOS\source
 
-10. copy esqlOCStart.cbl in C:\EOS\source
+10. copy esqlOCStart.cbl into C:\EOS\source
 
-11. copy esqlOCStart.bat in C:\EOS\source
+11. copy esqlOCStart.bat into C:\EOS\source
 
 12. add two inbound rules in the Windows Defender firewall to allow TCP and UDP to get to the SQlExpresss  use WF.msc
 https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-a-windows-firewall-for-database-engine-access?view=sql-server-ver16
